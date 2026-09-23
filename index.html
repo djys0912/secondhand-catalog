@@ -144,14 +144,25 @@
       display: block;
     }
 
-    .yt-play-badge {
+    .yt-thumb-img.yt-thumb-vertical {
+      transform: scale(1.5);
+    }
+
+    .yt-play-overlay {
       position: absolute;
-      top: 44%;
+      top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 60px;
-      height: 42px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       pointer-events: none;
+    }
+
+    .yt-play-badge {
+      width: 80px;
+      height: 56px;
+      margin-bottom: 10px;
     }
 
     .yt-play-badge svg {
@@ -161,16 +172,15 @@
     }
 
     .yt-watch-label {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      padding: 8px 10px;
-      background: linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0));
+      display: inline-block;
+      padding: 5px 12px;
+      background-color: rgba(0,0,0,0.65);
+      border-radius: 4px;
       color: #ffffff;
       font-size: 13px;
       font-weight: 600;
       text-align: center;
+      white-space: nowrap;
       font-family: Arial, Helvetica, sans-serif;
     }
 
@@ -3018,17 +3028,20 @@
         var id = extractYouTubeId(url);
         if (!id) continue;
 
+        var vertical = isYouTubeShorts(url);
         a.setAttribute('data-yt-id', id);
-        a.setAttribute('data-yt-vertical', isYouTubeShorts(url) ? '1' : '0');
+        a.setAttribute('data-yt-vertical', vertical ? '1' : '0');
         a.style.display = 'block';
         a.style.position = 'relative';
         a.style.width = '270px';
         a.style.height = '320px';
         a.innerHTML =
           '<span class="yt-thumb-wrap">' +
-            '<img class="yt-thumb-img" src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy" decoding="async">' +
-            '<span class="yt-play-badge" aria-hidden="true">' + YT_PLAY_SVG + '</span>' +
-            '<span class="yt-watch-label" data-i18n="ytWatchLabel">' + watchLabel + '</span>' +
+            '<img class="yt-thumb-img' + (vertical ? ' yt-thumb-vertical' : '') + '" src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy" decoding="async">' +
+            '<span class="yt-play-overlay" aria-hidden="true">' +
+              '<span class="yt-play-badge">' + YT_PLAY_SVG + '</span>' +
+              '<span class="yt-watch-label" data-i18n="ytWatchLabel">' + watchLabel + '</span>' +
+            '</span>' +
           '</span>';
 
         a.addEventListener('click', function (e) {
