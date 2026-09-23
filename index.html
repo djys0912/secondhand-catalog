@@ -144,10 +144,6 @@
       display: block;
     }
 
-    .yt-thumb-img.yt-thumb-vertical {
-      transform: scale(1.5);
-    }
-
     .yt-play-overlay {
       position: absolute;
       top: 50%;
@@ -3029,6 +3025,10 @@
         if (!id) continue;
 
         var vertical = isYouTubeShorts(url);
+        var row = a.closest('tr');
+        var firstImg = row && row.cells.length ? row.cells[0].querySelector('img') : null;
+        var thumbSrc = firstImg ? firstImg.getAttribute('src') : '';
+
         a.setAttribute('data-yt-id', id);
         a.setAttribute('data-yt-vertical', vertical ? '1' : '0');
         a.style.display = 'block';
@@ -3037,7 +3037,7 @@
         a.style.height = '320px';
         a.innerHTML =
           '<span class="yt-thumb-wrap">' +
-            '<img class="yt-thumb-img' + (vertical ? ' yt-thumb-vertical' : '') + '" src="https://img.youtube.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy" decoding="async">' +
+            (thumbSrc ? '<img class="yt-thumb-img" src="' + thumbSrc + '" alt="" loading="lazy" decoding="async">' : '') +
             '<span class="yt-play-overlay" aria-hidden="true">' +
               '<span class="yt-play-badge">' + YT_PLAY_SVG + '</span>' +
               '<span class="yt-watch-label" data-i18n="ytWatchLabel">' + watchLabel + '</span>' +
